@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculatorForFloatNumbers;
+using System;
 
 namespace Calculator
 {
@@ -7,9 +8,9 @@ namespace Calculator
         static void Main()
         {
 
-
-
+            string str = Console.ReadLine();
+            AdditionalCode.DecToCode(str);
 
         }
-    }  
+    }
 }
