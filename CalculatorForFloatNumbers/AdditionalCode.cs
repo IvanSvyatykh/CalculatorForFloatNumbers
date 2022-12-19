@@ -8,28 +8,16 @@ namespace CalculatorForFloatNumbers
 {
     public class AdditionalCode
     {
-        private static StringBuilder NormalizeStringBuilder(StringBuilder builder)
+        private static StringBuilder NormalizeStringBuilderForInt(StringBuilder builder, int amountOfBit)
         {
-            int length = builder.Length;
-            int count = 0;
-            while (length - 2 >= 0)
+            for (int i = 0; i < amountOfBit - builder.Length; i++)
             {
-                length -= 2;
-                count++;
+                builder.Append("0");
             }
 
-            if (Math.Pow(2, count) < builder.Length) count++;
-
-            StringBuilder builder1 = new StringBuilder();
-
-            for (int i = 0; i < Math.Pow(2, count) - builder.Length; i++)
-            {
-                builder1.Append("0");
-            }
-
-            return builder.Append(builder1);
+            return builder;
         }
-        private static string PosDecToCode(int number)
+        private static string PosDecToCode(int number, int amountOfBit)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -48,20 +36,21 @@ namespace CalculatorForFloatNumbers
             {
                 builder.Append(number);
             }
-
-            builder = NormalizeStringBuilder(builder);
-
+            Console.WriteLine();
             Console.WriteLine($"Полученное число {string.Join("", builder.ToString())} необходимо записать в обратном порядке");
+            Console.WriteLine();
             Console.WriteLine($"Итог: {string.Join("", builder.ToString().Reverse())}");
+            Console.WriteLine();
 
+            builder = NormalizeStringBuilderForInt(builder, amountOfBit);
             return string.Join("", builder.ToString().Reverse());
         }
-        private static string NegDecToCode(int number)
+        private static string NegDecToCodeForInt(int number, int amountOfBit)
         {
             Console.WriteLine($"Число {number} запишем по модулю {Math.Abs(number)}, после переведем его в двоичный код как положительное число");
             Console.WriteLine();
 
-            string str = PosDecToCode(Math.Abs(number));
+            string str = PosDecToCode(Math.Abs(number), amountOfBit);
             List<int> list = new List<int>();
             Console.WriteLine($"Полученное число будем преобразовывать таким образом, сначала инверитируем числа на каждой позиции, а после прибавим единицу в конец");
 
@@ -97,19 +86,157 @@ namespace CalculatorForFloatNumbers
                 }
 
             }
-
+            Console.WriteLine();
             return string.Join("", list); ;
         }
-        public static void DecToCode(string number)
+        private static string FloatPartToCodeForFloat(float number, int lengthOfFloatPart)
         {
-            if (int.TryParse(number, out int result))
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < lengthOfFloatPart; i++)
             {
-                if (result >= 0) Console.WriteLine($"{number} в дополонительном коде :{PosDecToCode(result)}");
-                else
+                Console.WriteLine($"Умножаем: {number} *2 = {number *= 2} и берем от него только целую часть {(int)number}, затем вычитаем целую частьть из {number}");
+                stringBuilder.Append((int)number);
+                number = number - (int)number;
+                if (number == 0)
                 {
-                    Console.WriteLine($"{number} в дополонительном коде :{NegDecToCode(result)}");
+                    Console.WriteLine($"Число стало равно 0, значит прекращяем умножение");
+                    break;
                 }
             }
+            Console.WriteLine();
+            Console.WriteLine("Итог: " + stringBuilder.ToString());
+            return stringBuilder.ToString();
+        }
+        private static string NormalizationOfData(string IntPart, string FloatPart, ref int count)
+        {
+            if (IntPart[0] == '0')
+            {
+                while (FloatPart[0] == '0')
+                {
+                    FloatPart = FloatPart.Substring(1);
+                    count--;
+                }
+                return FloatPart[0] + "," + FloatPart.Substring(1);
+            }
+            else
+            {
+                count = IntPart.Length - 1;
+                return IntPart[0] + "," + IntPart.Substring(1) + FloatPart;
+            }
+        }
+        private static string DeleteZeroInBegin(string number)
+        {
+            while (number[0] == '0')
+            {
+                number = number.Substring(1);
+            }
+            return number;
+        }
+        private static void WriteLine()
+        {
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                Console.Write("=");
+            }
+        }
+        private static string AddZero(int num)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < num; i++)
+            {
+                stringBuilder.Append("0");
+            }
+            return stringBuilder.ToString();
+        }
+        private static string PutDataToMass(int[] mass, string p, string n)
+        {
+            for (int i = 0; i < p.Length; i++)
+            {
+                mass[i + 1] = p[i] - '0';
+            }
+            for (int i = 0; i < n.Length; i++)
+            {
+                mass[p.Length + i + 1] = n[i] - '0';
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < mass.Length; i++)
+            {
+                stringBuilder.Append(mass[i]);
+            }
+            return stringBuilder.ToString();
+        }
+        public static string DecToCodeForInt(string number, int amountOfBit)
+        {
+            string str = null;
+
+            if (int.TryParse(number, out int result))
+            {
+                if (result >= 0) str = PosDecToCode(result, amountOfBit);
+                else str = NegDecToCodeForInt(result, amountOfBit);
+            }
+            if (str.Length > 1) str = DeleteZeroInBegin(str);
+            Console.WriteLine($"{number} в дополонительном коде : {str}");
+
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                Console.Write("=");
+            }
+            Console.WriteLine();
+            return str;
+        }
+        public static string FloatToCode(string number, int amountOfBit)
+        {
+            if (float.TryParse(number, out float result))
+            {
+                int p = 127;
+                int[] mass = new int[32];
+
+                if (result < 0) mass[0] = 1;
+                else mass[0] = 0;
+
+                result = Math.Abs(result);
+
+                Console.WriteLine($"Переведем в двоичный код целую и дробную часть числа.");
+                WriteLine();
+                Console.WriteLine("Целая часть числа в двоичной записи :");
+                Console.WriteLine();
+
+                string IntPart = PosDecToCode((int)result, amountOfBit);
+                WriteLine();
+                Console.WriteLine("Дробная часть числа в двоичной записи :");
+                Console.WriteLine();
+                string FloatPart = FloatPartToCodeForFloat(result - ((int)result), 32 - IntPart.Length - 8 - 1);
+                WriteLine();
+
+                string n = null;
+
+                if (IntPart.Length > 1) IntPart = DeleteZeroInBegin(IntPart);
+                int count = 0;
+                n = NormalizationOfData(IntPart, FloatPart, ref count);
+
+                Console.WriteLine($"Число {number} в нормолизированной записи двоичного кода: {n} * 2^({count})");
+                WriteLine();
+                Console.WriteLine($"Тогда порядок числа равен: {p += count}");
+                WriteLine();
+                string format = DeleteZeroInBegin(PosDecToCode(p, amountOfBit));
+                format = AddZero(8 - format.Length) + format;
+                Console.WriteLine($"Порядок в двоичной записи: {format}");
+                WriteLine();
+                Console.WriteLine($"Так как при нормализированной записи в целой части всегда стоит 1, то мантисса числа имеет вид {n = n.Substring(2)}");
+                WriteLine();
+                Console.WriteLine($"Число {number} в записи формата с плавающей точкой имеет вид: {n = PutDataToMass(mass, format, n)}");
+                WriteLine();
+                return n;
+            }
+            else
+            {
+                Console.WriteLine("Введенное число не возможно привести к двоичной записи, проверьте корректность ввода");
+                Console.ReadKey();
+                Console.Clear();
+                Programm.Main();
+                return null;
+            }
+
         }
     }
 }
