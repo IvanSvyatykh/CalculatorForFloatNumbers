@@ -43,37 +43,10 @@ namespace CalculatorForFloatNumbers
             if (n >= 97 && n <= 122) n = n - 'a' + 36;
 
             return n;
-        }
-        private static string CreateLine(int delta)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < delta; i++)
-            {
-                sb.Append(1);
-            }
-            return sb.ToString();
-        }
-        private static string AddZero(int num)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < num; i++)
-            {
-                stringBuilder.Append("0");
-            }
-            return stringBuilder.ToString();
-        }
+        }       
         public static void SumAddCodeForInt(string number1, string number2, int a, int b)
         {
-            if (b < 0) number2 = CreateLine(number1.Length - number2.Length) + number2;
-            if (a < 0) number1 = CreateLine(number2.Length - number1.Length) + number1;
-            if (b > 0) number2 = AddZero(number1.Length - number2.Length) + number2;
-            if (a > 0) number1 = AddZero(number2.Length - number1.Length) + number1;
-            if (a < b)
-            {
-                string s = number1;
-                number1 = number2;
-                number2 = s;
-            }
+
             int[] mass1 = new int[number1.Length];
             int[] mass2 = new int[number2.Length];
             int[] mass3 = new int[Math.Max(mass1.Length, mass2.Length)];
@@ -120,8 +93,7 @@ namespace CalculatorForFloatNumbers
 
             string str = null;
 
-            if (flag || (a >= 0 && b >= 0)) str = newDigit.ToString() + string.Join("", mass3);
-            else str = string.Join("", mass3);
+            str = string.Join("", mass3);
             Console.WriteLine($"Итог в двоичной системе счисления: {str}");
 
             for (int i = 0; i < Console.WindowWidth; i++)

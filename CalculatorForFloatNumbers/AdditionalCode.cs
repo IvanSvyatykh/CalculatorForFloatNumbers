@@ -10,12 +10,13 @@ namespace CalculatorForFloatNumbers
     {
         private static StringBuilder NormalizeStringBuilderForInt(StringBuilder builder, int amountOfBit)
         {
+            StringBuilder builder1 = new StringBuilder();
             for (int i = 0; i < amountOfBit - builder.Length; i++)
             {
-                builder.Append("0");
+                builder1.Append("0");
             }
 
-            return builder;
+            return builder.Append(builder1);
         }
         private static string PosDecToCode(int number, int amountOfBit)
         {
@@ -174,7 +175,6 @@ namespace CalculatorForFloatNumbers
                 if (result >= 0) str = PosDecToCode(result, amountOfBit);
                 else str = NegDecToCodeForInt(result, amountOfBit);
             }
-            if (str.Length > 1) str = DeleteZeroInBegin(str);
             Console.WriteLine($"{number} в дополонительном коде : {str}");
 
             for (int i = 0; i < Console.WindowWidth; i++)
