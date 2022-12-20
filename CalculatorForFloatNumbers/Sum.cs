@@ -62,8 +62,7 @@ namespace CalculatorForFloatNumbers
             {
                 mass2[i] = ConvertSymbolToNumber(number2[i]);
             }
-            bool flag = true;
-            int newDigit = 1;
+           
             Console.WriteLine($"{number1} + {number2} ");
             for (int i = 0; i < Math.Max(mass1.Length, mass2.Length); i++)
             {
@@ -87,7 +86,7 @@ namespace CalculatorForFloatNumbers
                     Console.WriteLine($"Число {mass3[mass3.Length - 1 - i]} в позиции {i + 1} больше основания ситемы, то вычиатем из него {2} и прибавляем на {i + 2} позицию еденицу");
                     mass3[mass3.Length - 1 - i] -= 2;
                     if (mass3.Length - i - 2 >= 0) mass3[mass3.Length - i - 2]++;
-                    else flag = false;
+
                 }
             }
 
