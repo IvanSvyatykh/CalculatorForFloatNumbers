@@ -1,6 +1,7 @@
 ﻿using CalculatorForFloatNumbers;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Text;
 
 namespace CalculatorForFloatNumbers
@@ -45,7 +46,7 @@ namespace CalculatorForFloatNumbers
                     Console.Write("Введите количество бит для хранения информации, количестов может быть либо 64, либо 32 : ");
                     string amountOfBit = NormalizationOfData(Console.ReadLine());
 
-                    if (int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64)
+                    if (amountOfBit == "" || int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64)
                     {
                         Console.WriteLine($"{amountOfBit} не равно ни 32, ни 64, проверьте ввод");
                         Console.ReadKey();
@@ -53,14 +54,14 @@ namespace CalculatorForFloatNumbers
                         Main();
                     }
 
-                    if (!int.TryParse(first, out int result))
+                    if (first != "" && !int.TryParse(first, out int result))
                     {
                         Console.WriteLine($"Число {first} нельзя привести к целому типу данных, проверьте ввод!");
                         Console.ReadKey();
                         Console.Clear();
                         Main();
                     }
-                    if (!int.TryParse(second, out result))
+                    if (second != "" && !int.TryParse(second, out result))
                     {
                         Console.WriteLine($"Число {second} нельзя привести к целому типу данных, проверьте ввод!");
                         Console.ReadKey();
@@ -74,7 +75,7 @@ namespace CalculatorForFloatNumbers
                     }
                     Console.WriteLine();
 
-                    Sum.SumAddCodeForInt(AdditionalCode.DecToCodeForInt(first, int.Parse(amountOfBit)), AdditionalCode.DecToCodeForInt(second, int.Parse(amountOfBit)), int.Parse(first), int.Parse(second));
+                    Sum.SumAddCodeForInt(AdditionalCode.DecToCodeForInt(first, int.Parse(amountOfBit)), AdditionalCode.DecToCodeForInt(second, int.Parse(amountOfBit)), true, false);
                 }
 
                 if (operation == "2")
@@ -85,7 +86,7 @@ namespace CalculatorForFloatNumbers
                     Console.Write("Введите количество бит для хранения информации, количестов может быть либо 64, либо 32 : ");
                     string amountOfBit = NormalizationOfData(Console.ReadLine());
 
-                    if (int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64)
+                    if (amountOfBit == "" || int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64)
                     {
                         Console.WriteLine($"{amountOfBit} не равно ни 32, ни 64, проверьте ввод");
                         Console.ReadKey();
@@ -93,7 +94,7 @@ namespace CalculatorForFloatNumbers
                         Main();
                     }
 
-                    if (!int.TryParse(number, out int result))
+                    if (number == "" || !int.TryParse(number, out int result))
                     {
                         Console.WriteLine($"Число {number} не записанно в десятичной иситеме счисления проверьте ввод!");
                         Console.ReadKey();
@@ -118,9 +119,17 @@ namespace CalculatorForFloatNumbers
                     Console.Write("Введите количество бит для хранения информации, количестов может быть либо 64, либо 32 : ");
                     string amountOfBit = NormalizationOfData(Console.ReadLine());
 
-                    if (int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64)
+                    if (amountOfBit == "" || int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64)
                     {
                         Console.WriteLine($"{amountOfBit} не равно ни 32, ни 64, проверьте ввод");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Main();
+                    }
+
+                    if (number == "" || !double.TryParse(number, out double result))
+                    {
+                        Console.WriteLine($"Число {number} невозможно привести к вещественному типу данных, проверьте ввод!");
                         Console.ReadKey();
                         Console.Clear();
                         Main();
@@ -135,8 +144,71 @@ namespace CalculatorForFloatNumbers
                     Console.WriteLine();
                     AdditionalCode.FloatToCode(number, int.Parse(amountOfBit));
                 }
-                Console.ReadKey();
-                Console.Clear();
+
+                if (operation == "4")
+                {
+                    
+                    Console.Write("Введите первое число : ");
+                    string number1 = NormalizationOfData(Console.ReadLine());
+
+                   
+                    Console.Write("Введите второе число : ");
+                    string number2 = NormalizationOfData(Console.ReadLine());
+
+                    Console.Write("Введите количество бит для хранения информации, количестов может быть либо 64, либо 32 : ");
+                    string amountOfBit = NormalizationOfData(Console.ReadLine());
+
+                    if (amountOfBit == "" || (int.Parse(amountOfBit) != 32 && int.Parse(amountOfBit) != 64))
+                    {
+                        
+                        Console.WriteLine($"{amountOfBit} не равно ни 32, ни 64, проверьте ввод");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Main();
+                    }
+                     
+
+                    if (number1 == "" || !double.TryParse(number1, out double result))
+                    {
+                        Console.WriteLine($"Число {number1} невозможно привести к вещественному типу данных, проверьте ввод!");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Main();
+                    }
+
+                    if (number2 == null || !double.TryParse(number2, out result))
+                    {
+                        Console.WriteLine($"Число {number2} невозможно привести к вещественному типу данных, проверьте ввод!");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Main();
+                    }
+                                       
+                    if (double.Parse(number1) < 0)
+                    {
+                        Console.WriteLine("Числа могут быть только положительными,введите другое число");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Main();
+                    }
+                    if (double.Parse(number2) < 0)
+                    {
+                        Console.WriteLine("Числа могут быть только положительными,введите другое число");
+                        Console.ReadKey();
+                        Console.Clear();
+                        Main();
+                    }
+                    Console.ReadKey();
+
+                    for (int i = 0; i < Console.WindowWidth; i++)
+                    {
+                        Console.Write("=");
+                    }
+                    Console.WriteLine();
+                    Sum.SumMantissa(AdditionalCode.FloatToCode(number1, int.Parse(amountOfBit)), AdditionalCode.FloatToCode(number2, int.Parse(amountOfBit)), int.Parse(amountOfBit), double.Parse(number1), double.Parse(number2));
+                    Console.ReadKey();
+                    Console.Clear();
+                }
             }
         }
     }
